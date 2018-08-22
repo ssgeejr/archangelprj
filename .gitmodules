@@ -1,0 +1,9 @@
+[submodule "archangelui"]
+	path = archangelui
+	url = git@github.com:ssgeejr/archangelui.git
+[submodule "archangelms"]
+	path = archangelms
+	url = git@github.com:ssgeejr/archangelms.git
+[submodule "archangeldb"]
+	path = archangeldb
+	url = git@github.com:ssgeejr/archangeldb.git
