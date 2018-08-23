@@ -7,6 +7,13 @@
 # BlueJ files
 *.ctxt
 
+IntelliJ
+.idea
+.extract
+*.iml
+frontend/*.iml
+service/*.iml
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
@@ -21,3 +28,20 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+/target
+service/target
+frontend/target
+
+
+.extract
+service/.extract
+frontend/.extrace
+
+.service
+service/.service
+frontend/.service
+
+.settings
+service/.settings
+frontend/.settings

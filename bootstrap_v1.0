@@ -1,0 +1,44 @@
+#!/bin/bash
+
+
+#if [ -d "ArchAngel" ]; then
+#  echo "DIRECTORY EXISTS, exiting"
+#  exit -1
+#fi
+
+
+
+docker stop seededdb
+docker rmi -f $(docker images | grep 'mongo:seeded' | awk '{print $3}')
+
+kill -9 $(ps -ef | grep '[a]rchAngelService.jar' | awk '{print $2}')
+kill -9 $(ps -ef | grep '[a]rchAngelFrontEnd.jar' | awk '{print $2}')
+rm -rf .extract
+rm -rf frontend/.extract
+rm -rf service/.extract
+
+cwd=$(pwd)
+
+cd database/docker
+docker build --tag mongodb:seeded .
+
+cd $cwd
+
+mvn clean package
+
+echo "starting ArchAngel WebAppUI"
+cd frontend
+java -jar target/archAngelFrontEnd.jar &
+cd $cwd
+
+
+echo "starting ArchAngel Microservice"
+cd service
+java -jar target/archAngelService.jar --httpPort=9000 &
+
+docker run --name seededdb --rm -p 27017:27017 -ti -d mongodb:seeded
+
+xhost=`hostname --ip-address`
+
+echo ">>> The ArchAngel is now online"
+echo "http://$xhost:8080"

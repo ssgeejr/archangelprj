@@ -1,0 +1,62 @@
+#!/bin/bash
+# Version 1.1-Alpha
+
+docker stop seededdb
+docker stop archangelui
+docker stop archangelms
+
+docker rmi -f $(docker images | grep 'mongo:seeded' | awk '{print $3}')
+docker rmi -f $(docker images | grep 'archangelui' | awk '{print $3}')
+docker rmi -f $(docker images | grep 'archangelms' | awk '{print $3}')
+
+cwd=$(pwd)
+
+mvn clean package
+
+echo "creating the archangelui (Web UI) Image"
+cd $cwd
+cd frontend/docker
+rm -rf archAngelFrontEnd.jar
+cp ../target/archAngelFrontEnd.jar .
+docker build --tag archangelui .
+
+echo "creating the archangelms (Microservice) Image"
+cd $cwd
+cd service/docker
+rm -rf archAngelService.jar
+cp ../target/archAngelService.jar .
+docker build --tag archangelms .
+
+echo "creating the mongodb:seeded (MongoDB preloaded data) Image"
+
+cd $cwd
+cd database/docker
+docker build --tag mongodb:seeded .
+
+
+# start the database
+echo "starting ArchAngel Seeded MongoDB"
+echo ".. PAUSING 5 seconds for the container to initialize .."
+# only use this setting if you are wanting to connect to the container remotely
+#docker run --name seededdb --rm -p 27017:27017 -ti -d mongodb:seeded
+docker run --name seededdb --rm -ti -d mongodb:seeded
+sleep 5s
+
+echo "starting ArchAngel Microservice"
+echo ".. PAUSING 30 seconds for the container to initialize .."
+# start the microservice
+# only use this port mapping if you are having trouble connecting the two containers
+# docker run --name archangelms --rm -p 9000:8080 --link seededdb:seededdb -ti -d archangelms
+docker run --name archangelms --rm --link seededdb:seededdb -ti -d archangelms
+sleep 30s
+
+echo "starting ArchAngel WebAppUI"
+echo ".. PAUSING 10 seconds for the container to initialize .."
+# start the Web-UI
+docker run --name archangelui --rm -p 8080:8080 --link archangelms:archangelms -ti -d archangelui
+sleep 30s
+
+xhost=`hostname --ip-address`
+
+echo ">>> The ArchAngel is now online"
+echo "http://$xhost:8080"
