@@ -1,0 +1,32 @@
+
+
+There is another way to do this which is a little simpler, however. If you pass --recurse-submodules to the git clone command, it will automatically initialize and update each submodule in the repository.
+--recurse-submodules
+git clone --recurse-submodules git@github.com:ssgeejr/archangelprj.git
+
+HTTPS>>>:  https://github.com/ssgeejr/archangelprj.git
+SSH>>:  git@github.com:ssgeejr/archangelprj.git
+
+git submodule init
+Submodule 'DbConnector' (https://github.com/chaconinc/DbConnector) registered for path 'DbConnector'
+$ git submodule update
+
+
+after checking out the archangelprj ... execute this command to pull down all the submodules
+git submodule update --init --recursive
+
+
+++ ================================= ++
+How did all this start ... ??
+git clone git@github.com:ssgeejr/archangelprj.git	
+git submodule add git@github.com:ssgeejr/archangelui.git		
+git submodule add git@github.com:ssgeejr/archangelms.git
+git submodule add git@github.com:ssgeejr/archangeldb.git
+
+git submodule add https://github.com/<user>/rubber-band rubber-band
+git commit -m "rubber-band submodule"
+git submodule update --init --recursive
+
+
+
+
