@@ -5,7 +5,7 @@ docker stop seededdb
 docker stop archangelui
 docker stop archangelms
 
-docker rmi -f $(docker images | grep 'mongo:seeded' | awk '{print $3}')
+docker rmi -f $(docker images | grep 'archangeldb' | awk '{print $3}')
 docker rmi -f $(docker images | grep 'archangelui' | awk '{print $3}')
 docker rmi -f $(docker images | grep 'archangelms' | awk '{print $3}')
 
@@ -15,25 +15,21 @@ mvn clean package
 
 echo "creating the archangelui (Web UI) Image"
 cd $cwd
-cd frontend/docker
-rm -rf archAngelFrontEnd.jar
-cp ../target/archAngelFrontEnd.jar .
+cd archangelui/docker
 docker build --tag archangelui .
 
 echo "creating the archangelms (Microservice) Image"
 cd $cwd
-cd service/docker
-rm -rf archAngelService.jar
-cp ../target/archAngelService.jar .
+cd archangelms/docker
 docker build --tag archangelms .
 
-echo "creating the mongodb:seeded (MongoDB preloaded data) Image"
+echo "creating the archangeldb (MongoDB preloaded data) Image"
 
 cd $cwd
-cd database/docker
-docker build --tag mongodb:seeded .
+cd archangeldb/docker
+docker build --tag archangeldb .
 
 xhost=`hostname --ip-address`
 
 echo ">>> The ArchAngel is now online"
-echo "http://$xhost:8080"
+echo "http://$xhost:10080"

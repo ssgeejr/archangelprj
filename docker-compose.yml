@@ -1,7 +1,7 @@
 version: '3'
 services:
     mongo:
-        image: 'mongodb:seeded'
+        image: archangeldb
         container_name: seededdb
         networks:
                 app_net:
@@ -29,7 +29,7 @@ services:
                 app_net:
                         ipv4_address: 192.168.50.30
         ports:
-            - '10080:8080'
+            - 80:8080
 networks:
     app_net:
         driver: bridge
