@@ -17,6 +17,11 @@ docker-compose-restart(){
 
 ```
 
+
+For gitbucket PR's and commits:
+http://sprintkins:8080/jenkins/job/archangelui-system/build?token=<secret token>
+
+
 log out, log back in ( or refresh your profile . ~/.profile ))  
 Once loaded into your shell, you can call it with:  
 ```
