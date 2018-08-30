@@ -1,35 +1,87 @@
 #!/bin/bash
-# Version 1.1-Alpha
 
-docker stop seededdb
-docker stop archangelui
-docker stop archangelms
 
-docker rmi -f $(docker images | grep 'archangeldb' | awk '{print $3}')
-docker rmi -f $(docker images | grep 'archangelui' | awk '{print $3}')
-docker rmi -f $(docker images | grep 'archangelms' | awk '{print $3}')
+#if [ -d "ArchAngel" ]; then
+#  echo "DIRECTORY EXISTS, exiting"
+#  exit -1
+#fi
 
-cwd=$(pwd)
 
-mvn clean package
+cwd=`pwd`
+clean=0
+start=0
 
-echo "creating the archangelui (Web UI) Image"
-cd $cwd
-cd archangelui/docker
-docker build --tag archangelui .
+for arg in "$@"
+do
+    if [[ "x$arg" == "xstart" ]];
+    then
+        echo "...Application will be started upon successful build..."
+	start=1
+    elif [[ "x$arg" == "xclean" ]];
+    then
+        echo "... Old images will be removed"
+        clean=1
+    fi
+done
 
-echo "creating the archangelms (Microservice) Image"
-cd $cwd
-cd archangelms/docker
-docker build --tag archangelms .
+echo "BUILDING ArchangeDB"
+if [[ $clean == 1 ]]; then
+	echo "cleaning archangeldb containers & images"
+	docker stop seededdb
+	docker rm seededdb
+	docker rmi -f archangeldb
+	docker rmi -f $(docker images | grep 'archangeldb' | awk '{print $3}')
+fi
 
-echo "creating the archangeldb (MongoDB preloaded data) Image"
+#kill -9 $(ps -ef | grep '[a]rchAngelService.jar' | awk '{print $2}')
+#kill -9 $(ps -ef | grep '[a]rchAngelFrontEnd.jar' | awk '{print $2}')
+#rm -rf .extract
+#rm -rf frontend/.extract
+#rm -rf service/.extract
 
-cd $cwd
-cd archangeldb/docker
+cd $cwd/archangeldb/docker
 docker build --tag archangeldb .
 
-xhost=`hostname --ip-address`
+echo "BUILDING ArchangeMS"
+if [[ $clean == 1 ]]; then
+        echo "cleaning archangelms images"
+	docker stop archangelms
+	docker rm archangelms
+	docker rmi -f archangelms
+	docker rmi -f $(docker images | grep 'archangelms' | awk '{print $3}')
+fi
+cd $cwd/archangelms
+rm -rf docker/*.jar
+mvn clean package
+cd docker/
+cp ../target/archAngelService.jar .
+docker build --tag archangelms .
 
-echo ">>> The ArchAngel is now online"
-echo "http://$xhost:10080"
+
+echo "BUILDING ArchangeUI"
+if [[ $clean == 1 ]]; then
+        echo "cleaning archangelui images"
+	docker stop archangelui
+	docker rm archangelui
+	docker rmi -f archangelui
+	docker rmi -f $(docker images | grep 'archangelui' | awk '{print $3}')
+fi
+cd $cwd/archangelui
+rm -rf docker/*.jar
+mvn clean package
+cd docker
+cp ../target/archAngelFrontEnd.jar .
+docker build --tag archangelui .
+
+
+if [[ $start == 1 ]]; then
+	echo "Application Built, starting application vai: docker-compose up -d"
+	cd $cwd/archangelui
+	docker-compose up -d
+else
+	echo "Application Built, you can start the system by executing: docker-compose up -d"
+ fi
+
+
+
+
