@@ -13,8 +13,8 @@
 	<url>https://github.com/ssgeejr/ArchAngel</url>
 
 	<modules>
-        <module>service</module>
-        <module>frontend</module>
+        <module>archangelms</module>
+        <module>archangelui</module>
     </modules>
     
 	<properties>

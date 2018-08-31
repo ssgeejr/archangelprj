@@ -17,6 +17,24 @@ docker-compose-restart(){
 
 ```
 
+### Open Firewall Ports
+Open the selected port, but first find which rule is enabled
+```
+firewall-cmd --get-active-zones
+```
+
+Then remember to reload the firewall for changes to take effect.
+```
+firewall-cmd --zone=public --add-port=2888/tcp --permanent
+firewall-cmd --reload
+```
+
+
+
+For gitbucket PR's and commits:
+http://sprintkins:8080/jenkins/job/archangelui-system/build?token=<secret token>
+
+
 log out, log back in ( or refresh your profile . ~/.profile ))  
 Once loaded into your shell, you can call it with:  
 ```

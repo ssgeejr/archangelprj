@@ -1,13 +1,13 @@
 version: '3'
 services:
     mongo:
-        image: 'mongodb:seeded'
-        container_name: seededdb
+        image: archangeldb
+        container_name: archangeldb
         networks:
                 app_net:
                         ipv4_address: 192.168.50.10
                         aliases:
-                                - seededdb
+                                - archangeldb
 
         tty: true
         stdin_open: true
@@ -21,6 +21,8 @@ services:
                         ipv4_address: 192.168.50.20
                         aliases:
                                 - archangelms
+        ports:
+            - 8880:8080
 
     nginx:
         image: archangelui
@@ -29,7 +31,7 @@ services:
                 app_net:
                         ipv4_address: 192.168.50.30
         ports:
-            - '10080:8080'
+            - 80:8080
 networks:
     app_net:
         driver: bridge
