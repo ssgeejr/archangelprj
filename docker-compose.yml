@@ -21,6 +21,8 @@ services:
                         ipv4_address: 192.168.50.20
                         aliases:
                                 - archangelms
+        ports:
+            - 8880:8080
 
     nginx:
         image: archangelui
