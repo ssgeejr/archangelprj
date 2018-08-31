@@ -27,8 +27,8 @@ done
 echo "BUILDING ArchangeDB"
 if [[ $clean == 1 ]]; then
 	echo "cleaning archangeldb containers & images"
-	docker stop seededdb
-	docker rm seededdb
+	docker stop archangeldb
+	docker rm archangeldb
 	docker rmi -f archangeldb
 	docker rmi -f $(docker images | grep 'archangeldb' | awk '{print $3}')
 fi
