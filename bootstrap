@@ -20,6 +20,8 @@ do
     elif [[ "x$arg" == "xclean" ]];
     then
         echo "... Old images will be removed"
+	echo "bringing the system offline ... docker-compose down"
+	docker-compose down
         clean=1
     fi
 done
