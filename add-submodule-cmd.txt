@@ -1,3 +1,73 @@
+print all the dangling images (untagged images)
+docker images -f "dangling=true" -q 
+
+... feed that into the remove command
+docker rmi $(docker images -f "dangling=true" -q)
+
+
+easy way to clean up docker. But just avail with the current version.
+docker system prune -a -f
+
+Just to keep the record, I have done some clean up using:
+This will not delete any container or any volume in use!
+docker volume rm $(docker volume ls -qf dangling=true)
+
+)))))))))))))))))))))))))))))))))))))))))))>>>>>>
+
+You can find those maven properties in the super pom.
+
+http://tomcat.apache.org/maven-plugin-2.2/tomcat7-maven-plugin/exec-war-only-mojo.html#buildDirectory
+<buildDirectory>${project.basedir}/docker</buildDirectory>
+
+[devops@cicd archangelui]$ git rm docker/war-exec.manifest
+rm 'docker/war-exec.manifest'
+[devops@cicd archangelui]$ git rm docker/war-exec.properties
+
+archangelui
+archangelms
+archangeldb
+
+docker rmi -f 973908e95e7c 2f32c04cf3db aa9e4524cb33
+
+docker/war-exec.properties
+
+You find the jar here:
+
+${M2_HOME}/lib/maven-model-builder-3.0.3.jar
+Open the jar with 7-zip or some other archiver (or use the jar tool).
+
+Navigate to
+
+org/apache/maven/model
+There you'll find the pom-4.0.0.xml.
+It contains all those "short cuts":
+${project.basedir}
+<project>
+    ...
+    <build>
+        <directory>${project.basedir}/target</directory>
+        <outputDirectory>${project.build.directory}/classes</outputDirectory>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
+        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+        <scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
+            </testResource>
+        </testResources>
+        ...
+    </build>
+    ...
+</project>
+
+*****************************************************************************
 
 
 There is another way to do this which is a little simpler, however. If you pass --recurse-submodules to the git clone command, it will automatically initialize and update each submodule in the repository.

@@ -41,7 +41,7 @@ fi
 #rm -rf frontend/.extract
 #rm -rf service/.extract
 
-cd $cwd/archangeldb/docker
+cd $cwd/archangeldb/mongodb
 docker build --tag archangeldb .
 
 echo "BUILDING ArchangeMS"
