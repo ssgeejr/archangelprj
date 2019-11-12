@@ -1,6 +1,9 @@
 # ArchAngel
 Simple Microservice Project: ArchAngel simulates a front-end composed of a single jsp and a "widget" that enabled http injection, a microservice running on a sererate IP and container (instance) which takls to a pre-seeded MongoDB container
 
+## CLONING 
+git clone --recurse-submodules git@github.com:ssgeejr/archangelprj.git
+
 ### ToDo
 
 * containerize the Front-end and microservice (MongoDB completed)
